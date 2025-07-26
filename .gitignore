@@ -1,0 +1,27 @@
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.Python
+env/
+venv/  # <-- Adicione esta linha
+.venv/ # <-- Ou esta, dependendo de como você nomeou
+*.egg-info/
+.pytest_cache/
+.coverage
+.mypy_cache/
+.ipynb_checkpoints/
+
+# Environment variables
+.env
+
+# Django specific
+*.log
+*.sqlite3
+media/
+static/ # if you collect static files here
+
+# IDE specific
+.vscode/
+.idea/
