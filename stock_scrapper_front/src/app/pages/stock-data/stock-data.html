@@ -1,1 +1,89 @@
-<p>stock-data works!</p>
+<!-- src/app/stock-data/stock-data.component.html -->
+<div class="container">
+  <h1>Dados de Ações do Fundamentus</h1>
+
+  <div class="input-section">
+    <label for="tickerInput">Ticker da Ação:</label>
+    <input id="tickerInput" type="text" [(ngModel)]="ticker" placeholder="Ex: PETR4">
+  </div>
+
+  <div class="button-group">
+    <button (click)="fetchDetails()">Buscar Detalhes</button>
+    <button (click)="fetchYearlyDividends()">Buscar Dividendos Anuais</button>
+    <button (click)="fetchMonthlyDividends()">Buscar Dividendos Mensais</button>
+  </div>
+
+  <div class="input-section">
+    <label for="yearsInput">Anos para Acumular (Anual):</label>
+    <input id="yearsInput" type="number" [(ngModel)]="years" min="1">
+    <button (click)="fetchAccumulatedYearly()">Acumular Anual</button>
+  </div>
+
+  <div class="input-section">
+    <label for="monthsInput">Meses para Acumular (Mensal):</label>
+    <input id="monthsInput" type="number" [(ngModel)]="months" min="1">
+    <button (click)="fetchAccumulatedMonthly()">Acumular Mensal</button>
+  </div>
+
+  <div *ngIf="loading" class="loading">Carregando dados...</div>
+  <div *ngIf="error" class="error-message">Erro: {{ error }}</div>
+
+  <div class="results-section">
+    <h2>Resultados:</h2>
+
+    <div *ngIf="companyDetails">
+      <h3>Detalhes da Empresa ({{ ticker | uppercase }})</h3>
+      <pre>{{ companyDetails | json }}</pre>
+    </div>
+
+    <div *ngIf="accumulatedYearly !== null">
+      <h3>Proventos Anuais Acumulados (Últimos {{ years }} anos)</h3>
+      <p><strong>Total:</strong> R$ {{ accumulatedYearly | number:'1.2-2' }}</p>
+    </div>
+
+    <div *ngIf="accumulatedMonthly !== null">
+      <h3>Proventos Mensais Acumulados (Últimos {{ months }} meses)</h3>
+      <p><strong>Total:</strong> R$ {{ accumulatedMonthly | number:'1.2-2' }}</p>
+    </div>
+
+    <div *ngIf="yearlyDividends.length > 0">
+      <h3>Histórico de Dividendos Anuais</h3>
+      <table>
+        <thead>
+          <tr>
+            <th>Ano</th>
+            <th>Valor (R$)</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let div of yearlyDividends">
+            <td>{{ div.Ano }}</td>
+            <td>{{ div.Valor | number:'1.2-2' }}</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div *ngIf="monthlyDividends.length > 0">
+      <h3>Histórico de Dividendos Mensais</h3>
+      <table>
+        <thead>
+          <tr>
+            <th>Data Ex</th>
+            <th>Valor (R$)</th>
+            <th>Tipo</th>
+            <th>Data Pgto</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let div of monthlyDividends">
+            <td>{{ div.Data }}</td>
+            <td>{{ div.Valor | number:'1.2-2' }}</td>
+            <td>{{ div.Tipo }}</td>
+            <td>{{ div['Data de Pagamento'] }}</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
